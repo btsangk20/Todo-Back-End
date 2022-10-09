@@ -1,7 +1,7 @@
 const taskController = require("../controllers/task.controller");
 
 const taskRouter = {
-  'GET': {
+  GET: {
     middlewares: [],
     controller: taskController.getTask,
   },
