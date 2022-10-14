@@ -1,4 +1,5 @@
 const Task = require("../models/task.model");
+const parseRequestBody = require("../middlewares/parseRequestBody");
 
 const taskController = {
   getTask,
@@ -22,21 +23,21 @@ function getTask(request, response) {
 
 function postTask(request, response) {
   // post task to database
-  let task = "";
-  request.on("data", (chunk) => {
-    task += chunk;
-  });
-  request.on("end", () => {
-    const newTask = new Task(JSON.parse(task));
-    newTask
-      .save()
-      .then((task) => {
-        response.end(JSON.stringify(task));
-      })
-      .catch((error) => {
-        response.end(JSON.stringify(error));
-      });
-  });
+  parseRequestBody(request, response)
+    .then(() => {
+      const task = new Task(request.body);
+      task
+        .save()
+        .then((task) => {
+          response.end(JSON.stringify(task));
+        })
+        .catch((error) => {
+          response.end(JSON.stringify(error));
+        });
+    })
+    .catch((error) => {
+      response.end(JSON.stringify(error));
+    });
 }
 
 function getTaskById(request, response) {
@@ -53,51 +54,61 @@ function getTaskById(request, response) {
 
 function putTask(request, response) {
   // replace task by id from database
-  const id = request.url.split("/")[2];
-  let task = "";
-  request.on("data", (chunk) => {
-    task += chunk;
-  });
-  request.on("end", () => {
-    Task.findByIdAndUpdate(id, JSON.parse(task), { new: true })
+  parseRequestBody(request, response)
+    .then(() => {
+      const id = request.url.split("/")[2];
+      Task.findByIdAndUpdate(id, request.body, { new: true })
+        .then((task) => {
+          response.end(JSON.stringify(task));
+        })
+        .catch((error) => {
+          response.end(JSON.stringify(error));
+        });
+    })
+    .catch((error) => {
+      response.end(JSON.stringify(error));
+    });
+}
+
+function patchTask(request, response) {
+  // update details name or status of task by id from database
+  // const id = request.url.split("/")[2];
+  // let task = "";
+  // request.on("data", (chunk) => {
+  //   task += chunk;
+  // });
+  // request.on("end", () => {
+  //   if (JSON.parse(task).name) {
+  //     Task.findByIdAndUpdate(id, { name: JSON.parse(task).name }, { new: true })
+  //       .then((task) => {
+  //         response.end(JSON.stringify(task));
+  //       })
+  //       .catch((error) => {
+  //         response.end(JSON.stringify(error));
+  //       });
+  //   } else if (JSON.parse(task).status) {
+  //     Task.findByIdAndUpdate(
+  //       id,
+  //       { status: JSON.parse(task).status },
+  //       { new: true }
+  //     )
+  //       .then((task) => {
+  //         response.end(JSON.stringify(task));
+  //       })
+  //       .catch((error) => {
+  //         response.end(JSON.stringify(error));
+  //       });
+  //   }
+  // });
+  parseRequestBody(request, response).then(() => {
+    const id = request.url.split("/")[2];
+    Task.findByIdAndUpdate(id, request.body, { new: true })
       .then((task) => {
         response.end(JSON.stringify(task));
       })
       .catch((error) => {
         response.end(JSON.stringify(error));
       });
-  });
-}
-
-function patchTask(request, response) {
-  // update details name or status of task by id from database
-  const id = request.url.split("/")[2];
-  let task = "";
-  request.on("data", (chunk) => {
-    task += chunk;
-  });
-  request.on("end", () => {
-    if (JSON.parse(task).name) {
-      Task.findByIdAndUpdate(id, { name: JSON.parse(task).name }, { new: true })
-        .then((task) => {
-          response.end(JSON.stringify(task));
-        })
-        .catch((error) => {
-          response.end(JSON.stringify(error));
-        });
-    } else if (JSON.parse(task).status) {
-      Task.findByIdAndUpdate(
-        id,
-        { status: JSON.parse(task).status },
-        { new: true }
-      )
-        .then((task) => {
-          response.end(JSON.stringify(task));
-        })
-        .catch((error) => {
-          response.end(JSON.stringify(error));
-        });
-    }
   });
 }
 

@@ -1,5 +1,4 @@
 const http = require("http");
-const fs = require("fs");
 const route = require("./routes/router");
 const mongoose = require("mongoose");
 
@@ -13,6 +12,7 @@ const server = http.createServer((request, response) => {
   const router = route(request);
   router(request, response);
 });
+
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
