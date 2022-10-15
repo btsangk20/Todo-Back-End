@@ -13,7 +13,6 @@ const server = http.createServer((request, response) => {
   router(request, response);
 });
 
-
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
 });
@@ -28,4 +27,3 @@ db.on("error", console.error.bind(console, "connection error:"));
 db.once("open", function () {
   console.log("Connected to database");
 });
-

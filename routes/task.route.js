@@ -5,30 +5,30 @@ const taskRouter = {
     middlewares: [],
     controller: taskController.getTask,
   },
-  'POST': {
+  POST: {
     middlewares: [],
     controller: taskController.postTask,
   },
-  'GET/:id': {
+  "GET/:id": {
     middlewares: [],
     controller: taskController.getTaskById,
   },
-  'PUT/:id': {
+  "PUT/:id": {
     middlewares: [],
     controller: taskController.putTask,
   },
-  'PATCH/:id': {
+  "PATCH/:id": {
     middlewares: [],
     controller: taskController.patchTask,
   },
-  'DELETE': {
+  DELETE: {
     middlewares: [],
     controller: taskController.deleteAllTask,
   },
-  'DELETE/:id': {
+  "DELETE/:id": {
     middlewares: [],
     controller: taskController.deleteTaskById,
-  }
+  },
 };
 
 module.exports = taskRouter;

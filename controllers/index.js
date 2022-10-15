@@ -1,3 +1,4 @@
-const taskController = require('./task.controller')
+const taskController = require("./task.controller");
+const userController = require("./authenticate.controller");
 
-module.exports = { taskController }
+module.exports = { taskController, userController };

@@ -1,5 +1,6 @@
 const Task = require("../models/task.model");
 const parseRequestBody = require("../middlewares/parseRequestBody");
+const authentication = require("../middlewares/authentication");
 
 const taskController = {
   getTask,
@@ -12,13 +13,17 @@ const taskController = {
 };
 
 function getTask(request, response) {
-  Task.find()
-    .then((tasks) => {
-      response.end(JSON.stringify(tasks));
-    })
-    .catch((error) => {
-      response.end(JSON.stringify(error));
-    });
+  authentication(request, response).then((user) => {
+    if (user) {
+      Task.find()
+        .then((tasks) => {
+          response.end(JSON.stringify(tasks));
+        })
+        .catch((error) => {
+          response.end(JSON.stringify(error));
+        });
+    }
+  });
 }
 
 function postTask(request, response) {
@@ -26,14 +31,9 @@ function postTask(request, response) {
   parseRequestBody(request, response)
     .then(() => {
       const task = new Task(request.body);
-      task
-        .save()
-        .then((task) => {
-          response.end(JSON.stringify(task));
-        })
-        .catch((error) => {
-          response.end(JSON.stringify(error));
-        });
+      task.save().then((task) => {
+        response.end(JSON.stringify(task));
+      });
     })
     .catch((error) => {
       response.end(JSON.stringify(error));
@@ -57,13 +57,9 @@ function putTask(request, response) {
   parseRequestBody(request, response)
     .then(() => {
       const id = request.url.split("/")[2];
-      Task.findByIdAndUpdate(id, request.body, { new: true })
-        .then((task) => {
-          response.end(JSON.stringify(task));
-        })
-        .catch((error) => {
-          response.end(JSON.stringify(error));
-        });
+      Task.findByIdAndUpdate(id, request.body, { new: true }).then((task) => {
+        response.end(JSON.stringify(task));
+      });
     })
     .catch((error) => {
       response.end(JSON.stringify(error));
