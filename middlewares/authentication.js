@@ -8,7 +8,6 @@ function authentication(request, response) {
     }
     const token = request.headers.authorization.split(" ")[1];
     const decoded = jwt.verify(token, "tujt31154Ng");
-
     return User.findOne({
       username: decoded.username,
       password: decoded.password,

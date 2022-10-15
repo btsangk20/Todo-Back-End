@@ -1,13 +1,14 @@
 const authenticate = require("../controllers/authenticate.controller");
+const parseRequestBody = require("../middlewares/parseRequestBody");
 
 const authenticateRouter = {
   POST: {
     "signin": {
-      middlewares: [],
+      middlewares: [parseRequestBody],
       controller: authenticate.signIn,
     },
     "signup": {
-      middlewares: [],
+      middlewares: [parseRequestBody],
       controller: authenticate.signUp,
     },
   },

@@ -13,17 +13,13 @@ const taskController = {
 };
 
 function getTask(request, response) {
-  authentication(request, response).then((user) => {
-    if (user) {
-      Task.find()
-        .then((tasks) => {
-          response.end(JSON.stringify(tasks));
-        })
-        .catch((error) => {
-          response.end(JSON.stringify(error));
-        });
-    }
-  });
+  Task.find()
+    .then((tasks) => {
+      response.end(JSON.stringify(tasks));
+    })
+    .catch((error) => {
+      response.end(JSON.stringify(error));
+    });
 }
 
 function postTask(request, response) {
