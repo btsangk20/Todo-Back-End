@@ -24,12 +24,11 @@ function getTask(request, response) {
 
 function postTask(request, response) {
   // post task to database
-  parseRequestBody(request, response)
-    .then(() => {
-      const task = new Task(request.body);
-      task.save().then((task) => {
-        response.end(JSON.stringify(task));
-      });
+  const task = new Task(request.body);
+  task
+    .save()
+    .then((task) => {
+      response.end(JSON.stringify(task));
     })
     .catch((error) => {
       response.end(JSON.stringify(error));
@@ -50,12 +49,10 @@ function getTaskById(request, response) {
 
 function putTask(request, response) {
   // replace task by id from database
-  parseRequestBody(request, response)
-    .then(() => {
-      const id = request.url.split("/")[2];
-      Task.findByIdAndUpdate(id, request.body, { new: true }).then((task) => {
-        response.end(JSON.stringify(task));
-      });
+  const id = request.url.split("/")[2];
+  Task.findByIdAndUpdate(id, request.body, { new: true })
+    .then((task) => {
+      response.end(JSON.stringify(task));
     })
     .catch((error) => {
       response.end(JSON.stringify(error));
@@ -63,16 +60,14 @@ function putTask(request, response) {
 }
 
 function patchTask(request, response) {
-  parseRequestBody(request, response).then(() => {
-    const id = request.url.split("/")[2];
-    Task.findByIdAndUpdate(id, request.body, { new: true })
-      .then((task) => {
-        response.end(JSON.stringify(task));
-      })
-      .catch((error) => {
-        response.end(JSON.stringify(error));
-      });
-  });
+  const id = request.url.split("/")[2];
+  Task.findByIdAndUpdate(id, request.body, { new: true })
+    .then((task) => {
+      response.end(JSON.stringify(task));
+    })
+    .catch((error) => {
+      response.end(JSON.stringify(error));
+    });
 }
 
 function deleteAllTask(request, response) {
