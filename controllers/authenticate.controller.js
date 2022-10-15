@@ -36,14 +36,9 @@ function signUp(request, response) {
           response.end(JSON.stringify({ error: "Username is exist" }));
         } else {
           const user = new User(request.body);
-          user
-            .save()
-            .then((user) => {
-              response.end(JSON.stringify(user));
-            })
-            .catch((error) => {
-              response.end(JSON.stringify(error));
-            });
+          user.save().then((user) => {
+            response.end(JSON.stringify(user));
+          });
         }
       });
     })
