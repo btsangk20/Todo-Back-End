@@ -23,7 +23,6 @@ function getTask(request, response) {
 }
 
 function postTask(request, response) {
-  // post task to database
   const task = new Task(request.body);
   task
     .save()

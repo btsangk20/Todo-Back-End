@@ -1,4 +1,4 @@
-function parseRequestBody (request, response) {
+function parseRequestBody (request, response, next) {
   try {
     return new Promise ((resolve, reject) => {
       let chunks = "";
@@ -7,11 +7,11 @@ function parseRequestBody (request, response) {
       });
       request.on("end", () => {
         request.body = JSON.parse(chunks) ? JSON.parse(chunks) : {};
-        resolve();
+        next();
       });
     });
   } catch (error) {
-    console.log(error);
+    response.end(JSON.stringify(error));
   }
 }
 
