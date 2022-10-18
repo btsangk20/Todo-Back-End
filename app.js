@@ -43,6 +43,7 @@ server.get("/upload", (request, response) => {
 });
 
 server.post("/upload", upload.single("image"), (request, response) => {
+  console.log(request.file);
   response.send("File uploaded");
 });
 
@@ -64,6 +65,11 @@ server.post("/tasks", authentication, parseRequestBody, (request, response) => {
   const controller = taskController.postTask;
   controller(request, response);
 });
+
+server.post('/authenticate/:id/upload', upload.single('image'), (request, response) => {
+  const controller = authenticateController.UploadAvatar;
+  controller(request, response);
+})
 
 server.patch(
   "/tasks/:id",

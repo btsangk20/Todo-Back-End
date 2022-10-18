@@ -8,6 +8,7 @@ dotenv.config();
 const userController = {
   signIn,
   signUp,
+  UploadAvatar,
 };
 
 function signIn(request, response) {
@@ -39,11 +40,26 @@ function signUp(request, response) {
     if (user) {
       response.end(JSON.stringify({ error: "Username is exist" }));
     } else {
-      const user = new User({username, password: hashPassword});
+      const user = new User({ username, password: hashPassword });
       user.save().then((user) => {
         response.end(JSON.stringify(user));
       });
     }
+  });
+}
+
+function UploadAvatar(request, response) {
+  const useird = request.url.split("/")[2];
+  const avatar = request.file.path;
+
+  User.findOne({ useird }).then((user) => {
+    if (!user) {
+      response.end(JSON.stringify({ message: "User is not exist." }));
+    }
+    user.avatar = avatar;
+    user.save().then((user) => {
+      response.end(JSON.stringify(user));
+    });
   });
 }
 
