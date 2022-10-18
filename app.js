@@ -2,13 +2,25 @@
 // const route = require("./routes/router");
 const mongoose = require("mongoose");
 const express = require("express");
+const path = require("path");
+const multer = require("multer");
+const stoage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: stoage });
+
+const hostname = "127.0.0.1";
+const port = process.env.PORT || 3000;
+
 const taskController = require("./controllers/task.controller");
 const authenticateController = require("./controllers/authenticate.controller");
 const authentication = require("./middlewares/authentication");
 const parseRequestBody = require("./middlewares/parseRequestBody");
-
-const hostname = "127.0.0.1";
-const port = process.env.PORT || 3000;
 
 // const server = http.createServer((request, response) => {
 //   response.statusCode = 200;
@@ -23,6 +35,16 @@ const port = process.env.PORT || 3000;
 // });
 
 const server = express();
+
+server.set("view engine", "ejs");
+
+server.get("/upload", (request, response) => {
+  response.render("upload");
+});
+
+server.post("/upload", upload.single("image"), (request, response) => {
+  response.send("File uploaded");
+});
 
 server.get("/", (request, response) => {
   response.send("This is server");
