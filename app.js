@@ -34,6 +34,8 @@ const parseRequestBody = require("./middlewares/parseRequestBody");
 //   console.log(`Server running at http://${hostname}:${port}/`);
 // });
 
+console.log('hihi');
+
 const server = express();
 
 server.set("view engine", "ejs");
