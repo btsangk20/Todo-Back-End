@@ -1,13 +1,10 @@
 const Task = require("../models/task.model");
-const parseRequestBody = require("../middlewares/parseRequestBody");
-const authentication = require("../middlewares/authentication");
 
 const taskController = {
   getTask,
   postTask,
   getTaskById,
-  putTask,
-  patchTask,
+  updateTask,
   deleteAllTask,
   deleteTaskById,
 };
@@ -35,8 +32,7 @@ function postTask(request, response) {
 }
 
 function getTaskById(request, response) {
-  // get task by id from database
-  const id = request.url.split("/")[2];
+  const id = request.params.id;
   Task.findById(id)
     .then((task) => {
       response.end(JSON.stringify(task));
@@ -46,20 +42,9 @@ function getTaskById(request, response) {
     });
 }
 
-function putTask(request, response) {
+function updateTask(request, response) {
   // replace task by id from database
-  const id = request.url.split("/")[2];
-  Task.findByIdAndUpdate(id, request.body, { new: true })
-    .then((task) => {
-      response.end(JSON.stringify(task));
-    })
-    .catch((error) => {
-      response.end(JSON.stringify(error));
-    });
-}
-
-function patchTask(request, response) {
-  const id = request.url.split("/")[2];
+  const id = request.params.id;
   Task.findByIdAndUpdate(id, request.body, { new: true })
     .then((task) => {
       response.end(JSON.stringify(task));
@@ -81,7 +66,7 @@ function deleteAllTask(request, response) {
 }
 
 function deleteTaskById(request, response) {
-  const id = request.url.split("/")[2];
+  const id = request.params.id;
   Task.findByIdAndDelete(id)
     .then((task) => {
       response.end(JSON.stringify(task));

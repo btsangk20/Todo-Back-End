@@ -1,17 +1,30 @@
-const authenticate = require("../controllers/authenticate.controller");
-const parseRequestBody = require("../middlewares/parseRequestBody");
+const authenticateController = require("../controllers/authenticate.controller");
+const express = require("express");
+const path = require("path");
+const multer = require("multer");
 
-const authenticateRouter = {
-  POST: {
-    "signin": {
-      middlewares: [parseRequestBody],
-      controller: authenticate.signIn,
-    },
-    "signup": {
-      middlewares: [parseRequestBody],
-      controller: authenticate.signUp,
-    },
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "images");
   },
-};
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+const upload = multer({ storage: storage });
+
+const authenticateRouter = express.Router();
+
+authenticateRouter.post("/:id/upload", upload.single('image'), (request, response) => {
+  authenticateController.UploadAvatar(request, response);
+});
+
+authenticateRouter.post("/signin", (request, response) => {
+  authenticateController.signIn(request, response);
+});
+
+authenticateRouter.post("/signup", (request, response) => {
+  authenticateController.signUp(request, response);
+});
 
 module.exports = authenticateRouter;
