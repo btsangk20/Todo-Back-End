@@ -1,9 +1,9 @@
-const taskRouter = require("./task.route");
+const taskRouter = require("./task.router");
 const authenticateRouter = require("./authenticate.router");
 
-const routes = {
-  tasks: taskRouter,
-  authenticate: authenticateRouter,
-};
+function routes(app) {
+  app.use("/tasks", taskRouter);
+  app.use("/authenticate", authenticateRouter);
+}
 
 module.exports = routes;

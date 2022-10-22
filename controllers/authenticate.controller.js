@@ -49,18 +49,16 @@ function signUp(request, response) {
 }
 
 function UploadAvatar(request, response) {
-  const useird = request.url.split("/")[2];
+  const userId = request.params.id;
   const avatar = request.file.path;
 
-  User.findOne({ useird }).then((user) => {
-    if (!user) {
-      response.end(JSON.stringify({ message: "User is not exist." }));
-    }
-    user.avatar = avatar;
-    user.save().then((user) => {
+  User.findByIdAndUpdate(userId, {avatar}, { new: true })
+    .then((user) => {
       response.end(JSON.stringify(user));
+    })
+    .catch((error) => {
+      response.end(JSON.stringify(error));
     });
-  });
 }
 
 module.exports = userController;
